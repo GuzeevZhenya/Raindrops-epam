@@ -11,17 +11,13 @@ const levelUpMsg = document.querySelector('.level-up');
 let raindrops = [];
 let timers = [];
 let audioMusic = document.querySelector('.audio-music');
-const gameCountNumber = document.querySelector('.game-count-number')
+const gameCountNumber = document.querySelector('.game-count-number');
 
 const gameOver = document.querySelector('.game-over');
 let bonusCount = 0;
+let count = document.querySelector('.count-number');
 
-startBtn.addEventListener('click', startGame);
-input.addEventListener('keydown', userInputHandle);
-
-
-let count = document.querySelector(".count-number");
-function userInputHandle(event) {
+const userInputHandle = (event) => {
   if (event.code === 'Enter') {
     const guess = event.target.value;
     event.target.value = '';
@@ -34,61 +30,30 @@ function userInputHandle(event) {
       }
     });
   }
-}
+};
 
-const intersectObserver = new IntersectionObserver(
-  (entries) =>
-    entries.forEach((entry) => {
-      if (entry.isIntersecting && entry.intersectionRatio !== 1) {
-        entry.target.remove();
-        errorNumber++;
-        if (errorNumber === 3) {
-          endGame();
-        }
-        raiseWaves();
-      }
-    }),
-  {
-    root: rainArea,
-    threshold: [ 0.1, 1 ],
-  },
-);
+const audioPlay = (loseGame) => {
+  if (loseGame === 'lose') {
+    audioMusic.src = 'audio/lose.mp3';
+  } else if (loseGame === 'error') {
+    audioMusic.src = 'audio/error.mp3';
+  } else {
+    audioMusic.src = 'audio/right.mp3';
+  }
+  audioMusic.play();
+};
 
-function startGame() {
-    count.textContent = 0;
-  startBtn.classList.toggle('invisible');
-    timers.push(setInterval(createRaindrop, 2000), setInterval(increaseDifficulty, 5000));
-    gameOver.style.display = 'none';
-  raiseWaves();
-}
+const getRandomNumber = () => {
+  return Math.ceil(Math.random() * (difficulty * 10));
+};
 
-function increaseDifficulty() {
-  difficulty = difficulty + 0.1;
-  levelUpMsg.classList.toggle('invisible');
-  setTimeout(() => {
-    levelUpMsg.classList.toggle('invisible');
-  }, 1000);
-}
+const getRandomOperator = () => {
+  const operators = [ '+', '-', '*', '/' ];
+  const randomOperatorIndex = Math.floor(Math.random() * operators.length);
+  return operators[randomOperatorIndex];
+};
 
-function createRaindrop() {
-  const [ problem, result ] = getRandomProblem();
-  const raindrop = document.createElement('div');
-  raindrop.classList.add('raindrop');
-  raindrop.innerHTML = problem;
-  raindrop.dataset.result = result;
-  raindrop.style.left = getRaindropPosition();
-  raindrop.style.animation = `${animationSpeed / difficulty}s linear forwards raindrop_fall`;
-  rainArea.appendChild(raindrop);
-  raindrops.push(raindrop);
-  intersectObserver.observe(raindrop);
-}
-
-function getRaindropPosition() {
-  gameAreaWidth = +getComputedStyle(gameArea).width.slice(0, -2);
-  return `${Math.abs(Math.floor(gameAreaWidth * Math.random()) - raindropSize)}px`;
-}
-
-function getRandomProblem() {
+const getRandomProblem = () => {
   const operator = getRandomOperator();
   let firstNumber = getRandomNumber();
   let secondNumber = getRandomNumber();
@@ -121,26 +86,69 @@ function getRandomProblem() {
     }
   }
   return [ `${firstNumber} ${operator} ${secondNumber}`, result ];
-}
+};
 
-function getRandomNumber() {
-  return Math.ceil(Math.random() * (difficulty * 10));
-}
+const intersectObserver = new IntersectionObserver(
+  (entries) =>
+    entries.forEach((entry) => {
+      if (entry.isIntersecting && entry.intersectionRatio !== 1) {
+        entry.target.remove();
+        errorNumber++;
+        if (errorNumber === 3) {
+          endGame();
+        }
+        raiseWaves();
+      }
+    }),
+  {
+    root: rainArea,
+    threshold: [ 0.1, 1 ],
+  },
+);
 
-function getRandomOperator() {
-  const operators = [ '+', '-', '*', '/' ];
-  const randomOperatorIndex = Math.floor(Math.random() * operators.length);
-  return operators[randomOperatorIndex];
-}
+const increaseDifficulty = () => {
+  let timeForIncreased = 3000;
+  difficulty = difficulty + 0.1;
+  levelUpMsg.classList.toggle('invisible');
+  setTimeout(() => {
+    levelUpMsg.classList.toggle('invisible');
+  }, timeForIncreased);
+};
 
-function raiseWaves() {
+const getRaindropPosition = () => {
+  gameAreaWidth = +getComputedStyle(gameArea).width.slice(0, -2);
+  return `${Math.abs(Math.floor(gameAreaWidth * Math.random()) - raindropSize)}px`;
+};
+
+const createRaindrop = () => {
+  const [ problem, result ] = getRandomProblem();
+  const raindrop = document.createElement('div');
+  raindrop.classList.add('raindrop');
+  raindrop.innerHTML = problem;
+  raindrop.dataset.result = result;
+  raindrop.style.left = getRaindropPosition();
+  raindrop.style.animation = `${animationSpeed / difficulty}s linear forwards raindrop_fall`;
+  rainArea.appendChild(raindrop);
+  raindrops.push(raindrop);
+  intersectObserver.observe(raindrop);
+};
+
+const startGame = () => {
+  count.textContent = 0;
+  startBtn.classList.toggle('invisible');
+  timers.push(setInterval(createRaindrop, 2000), setInterval(increaseDifficulty, 5000));
+  gameOver.style.display = 'none';
+  raiseWaves();
+};
+
+const raiseWaves = () => {
   const waves = document.querySelector('.wave-wrapper');
   const delta = errorNumber * 100;
   waves.style.bottom = `${delta}px`;
   wave.style.height = `${60 + delta}px`;
-}
+};
 
-function endGame() {
+const endGame = () => {
   timers.forEach(clearInterval);
   raindrops.forEach((raindrop) => raindrop.remove());
   timer = [];
@@ -148,20 +156,10 @@ function endGame() {
   errorNumber = 0;
   bonusCount = 0;
   startBtn.classList.toggle('invisible');
-    audioPlay('lose');
-    gameOver.style.display = 'block';
-    gameCountNumber.textContent = count.textContent;
-}
+  audioPlay('lose');
+  gameOver.style.display = 'block';
+  gameCountNumber.textContent = count.textContent;
+};
 
-function audioPlay(loseGame) {
-  console.log(loseGame);
-  if (loseGame === 'lose') {
-    audioMusic.src = 'audio/lose.mp3';
-  } else if (loseGame === 'error') {
-    audioMusic.src = 'audio/error.mp3';
-  } else {
-    audioMusic.src = 'audio/right.mp3';
-  }
-
-  audioMusic.play();
-}
+startBtn.addEventListener('click', startGame);
+input.addEventListener('keydown', userInputHandle);

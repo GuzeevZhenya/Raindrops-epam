@@ -1,0 +1,206 @@
+:root {
+    --raindropSize: 50px;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+#game-area {
+    flex: 0 1 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+#rain-area {
+    flex: 2 0 auto;
+    position: relative;
+    z-index: 20;
+}
+
+#start{
+    position: absolute;
+    width: 200px;
+    height: 50px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 20;
+    font-size:16px;
+    outline: none;
+    border-radius: 50%;
+}
+
+.level-up {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 20;
+}
+
+.invisible {
+    display: none;
+}
+
+.raindrop {
+    height: var(--raindropSize);
+    width: var(--raindropSize);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    animation: 1s linear forwards raindrop_fall;
+    background-color: #e8ff18;
+}
+
+@keyframes raindrop_fall {
+    from {
+        top: 0;
+    }
+    to {
+        top: calc(100% + var(--raindropSize));
+    }
+}
+
+#wave {
+    height: 60px;
+    width: 100%;
+    flex: 0 2 auto;
+}
+
+aside {
+    width: 242px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.count{
+	position: relative;
+    display: flex;
+	align-items: center;
+	justify-content: center;
+
+	width: 80%;
+	height: 60px;
+	background-color: rgb(241, 232, 232);
+	border-radius: 0 0 50px 50px;
+	font-size: 32px;
+	color: black;
+	border: 3px solid white;
+	border-top: 0px ;
+}
+.count-number{
+	color: rgb(175, 33, 33);
+}
+
+
+/* wave animation */
+
+.wave-wrapper {
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    margin: auto;
+}
+.wave-wrapper-inner {
+    position: absolute;
+    width: 100%;
+    overflow: hidden;
+    height: 100%;
+    bottom: -1px;
+    background-image: linear-gradient(to top, #a7a42c 20%, #5e3aa0 80%);
+}
+.bg-top {
+    z-index: 15;
+    opacity: 0.5;
+}
+.bg-middle {
+    z-index: 10;
+    opacity: 0.75;
+}
+.bg-bottom {
+    z-index: 5;
+}
+.wave {
+    position: absolute;
+    left: 0;
+    width: 200%;
+    height: 100%;
+    background-repeat: repeat no-repeat;
+    background-position: 0 bottom;
+    transform-origin: center bottom;
+}
+.wave-top {
+    background-size: 50% 100px;
+    background-image:url('http://front-end-noobs.com/jecko/img/wave-top.png');
+     
+}
+
+.wave-middle {
+    background-size: 50% 120px;
+    background-image:  url('http://front-end-noobs.com/jecko/img/wave-mid.png');
+    
+}
+.wave-bottom {
+    background-size: 50% 100px;
+    background-image: url('http://front-end-noobs.com/jecko/img/wave-bot.png');
+}
+
+.wave-animation .wave-top {
+    animation: move-wave 3s;
+    -webkit-animation: move-wave 3s;
+    -webkit-animation-delay: 1s;
+    animation-delay: 1s;
+}
+.wave-animation .wave-middle {
+    animation: move_wave 10s linear infinite;
+}
+.wave-animation .wave-bottom {
+    animation: move_wave 15s linear infinite;
+}
+
+@keyframes move_wave {
+    0% {
+        transform: translateX(0) translateZ(0) scaleY(1);
+    }
+    50% {
+        transform: translateX(-25%) translateZ(0) scaleY(0.55);
+    }
+    100% {
+        transform: translateX(-50%) translateZ(0) scaleY(1);
+    }
+}
+
+
+.game-over {
+    display: none;
+  width: 300px;
+  height: 150px;
+  font-size:2em;
+  text-align:center;
+  position: absolute;
+  top: 15%;
+  z-index: 200;
+  left: 40%;
+} 
+
+.game-over p{
+	animation: example 5s linear infinite;
+	margin-top: 10px;
+}
+
+.game-count{
+	display:flex;
+	font-size:32px;
+	color:white;
+}

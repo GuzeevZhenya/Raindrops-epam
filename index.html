@@ -1,12 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
-</head>
-<body>
-	
-</body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" />
+        <title>Raindrops</title>
+    </head>
+    <body>
+        <div class="container">
+
+            <audio class = "audio-music" src="audio/right.mp3"></audio>
+            <audio class = "sea-sound" src="audio/sea.mp3"></audio>
+            <aside class="calculator">
+                <input id="input" type="number" autofocus />
+                <div class="count">Score: <p class="count-number">0</pc>
+            </aside>
+            <main id="game-area">
+                <div class="game-over">
+                    <p>Game Over</p>
+                    <p class="game-count">Ваш счет: <span class="game-count-number"></span></p>
+                </div>
+                <div id="rain-area"></div>
+                <div id="wave">
+                    <div class="wave-wrapper wave-animation">
+                        <div class="wave-wrapper-inner bg-top">
+                            <div class="wave wave-top"></div>
+                        </div>
+                        <div class="wave-wrapper-inner bg-middle">
+                            <div class="wave wave-middle"></div>
+                        </div>
+                        <div class="wave-wrapper-inner bg-bottom">
+                            <div class="wave wave-bottom"></div>
+                        </div>
+                    </div>
+                </div>
+                <button id="start">Start game</button>
+                <h1 class="level-up invisible">Level up!</h1>
+            </main>
+        </div>
+        <script src="app.js"></script>
+    </body>
 </html>
